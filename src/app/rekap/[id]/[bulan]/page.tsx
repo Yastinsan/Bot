@@ -76,73 +76,74 @@ export default function RekapPage() {
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, sheet, 'Rekap Pengeluaran');
     XLSX.writeFile(wb, `Rekap-Pengeluaran.xlsx`);
-  };  
-
+  }; 
+  
   return (
-    <div className="min-h-screen bg-white text-black p-6 relative font-sans">
-      {/* Logo pojok kanan bawah */}
-      <div style={{ bottom: '-30px', right: '20px' }} className="absolute">
-        <img src="/Ferlly Fahtasya Logo.png" alt="Logo" className="w-60 h-60 object-contain" />
-      </div>
-
-      {/* Logo pojok kanan atas */}  
-      <div style={{ top: '-15px', right: '20px' }} className="absolute">    
-        <img src="/Logo Keuangan Pey.png" alt="Logo" className="w-50 h-50 object-contain" />
-      </div>
-
+    <div className="min-h-screen bg-white text-black p-6 font-sans flex flex-col relative">
       {/* Header */}
       <div className="text-center mb-4">
         <h1 className="text-2xl font-bold tracking-wide">REKAP PENGELUARAN</h1>
       </div>
-
+  
       {/* Info User */}
       <div className="mb-4">
         <p className="text-sm text-gray-700">User ID: <span className="font-semibold">{id}</span></p>
         <p className="text-sm text-gray-700">Bulan: <span className="font-semibold">{bulan}</span></p>
       </div>
-
-      {/* Tabel semua pengeluaran */}
-      <table className="w-full text-sm mb-8 table-fixed">
-        <thead>
-          <tr className="bg-gray-200 text-left border border-gray-300">
-            <th className="border px-2 py-1 w-[50px]">No</th>
-            <th className="border px-2 py-1 w-[120px]">Tanggal</th>
-            <th className="border px-2 py-1 w-[40%]">Barang</th>
-            <th className="border px-2 py-1 w-[20%]">Kategori</th>
-            <th className="border px-2 py-1 w-[20%] text-right">Jumlah</th>
-          </tr>
-        </thead>
-        <tbody>
-          {pengeluaran.map((item, index) => (
-            <tr key={index} className="hover:bg-gray-50">
-              <td className="px-2 py-1">{index + 1}</td>
-              <td className="px-2 py-1">{item.tanggal}</td>
-              <td className="px-2 py-1">{item.catatan}</td>
-              <td className="px-2 py-1">{item.kategori}</td>
-              <td className="px-2 py-1 text-right">Rp{item.jumlah.toLocaleString('id-ID')}</td>
+  
+      {/* Tabel dalam scrollable container */}
+      <div className="overflow-auto max-h-[500px] border rounded-md">
+        <table className="w-full text-sm table-fixed">
+          <thead className="bg-gray-200 text-left border border-gray-300">
+            <tr>
+              <th className="border px-2 py-1 w-[50px]">No</th>
+              <th className="border px-2 py-1 w-[120px]">Tanggal</th>
+              <th className="border px-2 py-1 w-[40%]">Barang</th>
+              <th className="border px-2 py-1 w-[20%]">Kategori</th>
+              <th className="border px-2 py-1 w-[20%] text-right">Jumlah</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
-
-      {/* Total per kategori */}
-      <div className="absolute bottom-10 right-6 text-sm font-semibold text-right">
-        <h2 className="text-base mb-1">Total per Kategori:</h2>
-        {Object.entries(kategoriMap).map(([kategori, total], idx) => (
-          <p key={idx}>
-            {kategori}: Rp{total.toLocaleString('id-ID')}
-          </p>
-        ))}
+          </thead>
+          <tbody>
+            {pengeluaran.map((item, index) => (
+              <tr key={index} className="hover:bg-gray-50">
+                <td className="px-2 py-1">{index + 1}</td>
+                <td className="px-2 py-1">{item.tanggal}</td>
+                <td className="px-2 py-1">{item.catatan}</td>
+                <td className="px-2 py-1">{item.kategori}</td>
+                <td className="px-2 py-1 text-right">Rp{item.jumlah.toLocaleString('id-ID')}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
-
-      {/* Tombol Export */}
-      <div className="absolute bottom-20 left-6">
+  
+      {/* Bagian bawah: tombol export & total kategori */}
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end mt-6 gap-4">
         <button
           onClick={exportToExcel}
-          className="bg-green-500 hover:bg-green-600 text-white font-bold py-1 px-2 rounded shadow-md"
+          className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded shadow-md"
         >
           Export to Excel
         </button>
+  
+        <div className="text-sm font-semibold text-right">
+          <h2 className="text-base mb-1">Total per Kategori:</h2>
+          {Object.entries(kategoriMap).map(([kategori, total], idx) => (
+            <p key={idx}>
+              {kategori}: Rp{total.toLocaleString('id-ID')}
+            </p>
+          ))}
+        </div>
+      </div>
+  
+      {/* Logo pojok kanan bawah */}
+      <div className="absolute bottom-0 right-0 opacity-30 pointer-events-none">
+        <img src="/Ferlly Fahtasya Logo.png" alt="Logo" className="w-40 h-40 object-contain" />
+      </div>
+  
+      {/* Logo pojok kanan atas */}
+      <div className="absolute top-0 right-0 mt-2 mr-2">
+        <img src="/Logo Keuangan Pey.png" alt="Logo" className="w-20 h-20 object-contain" />
       </div>
     </div>
   );
