@@ -76,24 +76,29 @@ export default function RekapPage() {
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, sheet, 'Rekap Pengeluaran');
     XLSX.writeFile(wb, `Rekap-Pengeluaran.xlsx`);
-  }; 
-  
+  };
+
+  const totalSemua = pengeluaran.reduce((acc, item) => acc + item.jumlah, 0);
   return (
-    <div className="min-h-screen bg-white text-black p-6 font-sans flex flex-col relative">
+    <div className="min-h-screen bg-white text-black p-4 sm:p-6 font-sans relative">
       {/* Header */}
       <div className="text-center mb-4">
-        <h1 className="text-2xl font-bold tracking-wide">REKAP PENGELUARAN</h1>
+        <h1 className="text-lg sm:text-2xl font-bold tracking-wide">REKAP PENGELUARAN</h1>
       </div>
   
       {/* Info User */}
-      <div className="mb-4">
-        <p className="text-sm text-gray-700">User ID: <span className="font-semibold">{id}</span></p>
-        <p className="text-sm text-gray-700">Bulan: <span className="font-semibold">{bulan}</span></p>
+      <div className="mb-4 text-sm">
+        <p className="text-gray-700">
+          User ID: <span className="font-semibold break-all">{id}</span>
+        </p>
+        <p className="text-gray-700">
+          Bulan: <span className="font-semibold">{bulan}</span>
+        </p>
       </div>
   
-      {/* Tabel dalam scrollable container */}
-      <div className="overflow-auto max-h-[500px] border rounded-md">
-        <table className="w-full text-sm table-fixed">
+      {/* Tabel pengeluaran */}
+      <div className="overflow-x-auto mb-8">
+        <table className="min-w-[600px] w-full text-sm table-fixed">
           <thead className="bg-gray-200 text-left border border-gray-300">
             <tr>
               <th className="border px-2 py-1 w-[50px]">No</th>
@@ -110,35 +115,45 @@ export default function RekapPage() {
                 <td className="px-2 py-1">{item.tanggal}</td>
                 <td className="px-2 py-1">{item.catatan}</td>
                 <td className="px-2 py-1">{item.kategori}</td>
-                <td className="px-2 py-1 text-right">Rp{item.jumlah.toLocaleString('id-ID')}</td>
+                <td className="px-2 py-1 text-right">
+                  Rp{item.jumlah.toLocaleString('id-ID')}
+                </td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
   
-      {/* Bagian bawah: tombol export & total kategori */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end mt-1 gap-4">
-        <button
-          onClick={exportToExcel}
-          className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded shadow-md"
-        >
-          Export to Excel
-        </button>
-  
-        <div className="text-sm font-semibold text-right">
-          <h2 className="text-base mb-1">Total per Kategori:</h2>
-          {Object.entries(kategoriMap).map(([kategori, total], idx) => (
-            <p key={idx}>
-              {kategori}: Rp{total.toLocaleString('id-ID')}
-            </p>
-          ))}
-        </div>
+      {/* Tombol + Total */}
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-10 gap-4">
+      {/* Tombol Export */}
+      <button
+        onClick={exportToExcel}
+        className="w-full sm:w-auto bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded shadow-md"
+      >
+        Export to Excel
+      </button>
+
+      {/* Total Kategori */}
+      <div className="text-sm font-semibold text-left sm:text-right">
+        <h2 className="text-base mb-1">
+          Total Keseluruhan: Rp{totalSemua.toLocaleString('id-ID')}
+        </h2>
+        {Object.entries(kategoriMap).map(([kategori, total], idx) => (
+          <p key={idx}>
+            {kategori}: Rp{total.toLocaleString('id-ID')}
+          </p>
+        ))}
+      </div>
       </div>
   
-      {/* Logo pojok kanan atas */}
-      <div className="absolute top-0 right-0 mt-2 mr-4">
-        <img src="/Logo Keuangan Pey.png" alt="Logo" className="w-40 h-40 object-contain" />
+      {/* Logo atas kanan */}
+      <div className="absolute top-4 right-4 hidden sm:block">
+        <img
+          src="/Logo Keuangan Pey.png"
+          alt="Logo"
+          className="w-40 h-40 object-contain"
+        />
       </div>
     </div>
   );
