@@ -118,7 +118,7 @@ export default function RekapPage() {
       </div>
   
       {/* Bagian bawah: tombol export & total kategori */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end mt-6 gap-4">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end mt-1 gap-4">
         <button
           onClick={exportToExcel}
           className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded shadow-md"
@@ -136,14 +136,9 @@ export default function RekapPage() {
         </div>
       </div>
   
-      {/* Logo pojok kanan bawah */}
-      <div className="absolute bottom-0 right-0 opacity-30 pointer-events-none">
-        <img src="/Ferlly Fahtasya Logo.png" alt="Logo" className="w-40 h-40 object-contain" />
-      </div>
-  
       {/* Logo pojok kanan atas */}
-      <div className="absolute top-0 right-0 mt-2 mr-2">
-        <img src="/Logo Keuangan Pey.png" alt="Logo" className="w-20 h-20 object-contain" />
+      <div className="absolute top-0 right-0 mt-2 mr-4">
+        <img src="/Logo Keuangan Pey.png" alt="Logo" className="w-40 h-40 object-contain" />
       </div>
     </div>
   );
