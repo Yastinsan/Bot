@@ -134,14 +134,22 @@ export default function RekapPage() {
         Export to Excel
       </button>
 
-      {/* Total Kategori */}
-      <div className="text-sm font-semibold text-left sm:text-right">
+      {/* Total + Logo sebagai watermark */}
+      <div className="relative text-sm font-semibold text-left sm:text-right">
+        {/* Watermark logo */}
+        <img
+          src="/Ferlly Fahtasya Logo.png"
+          alt="Logo Watermark"
+          className="absolute bottom-0 right-10 w-60 h-60 opacity-100 pointer-events-none"
+        />
+
+      {/* Isi total + kategori */}
         <h2 className="text-base mb-1">
           Total Keseluruhan: Rp{totalSemua.toLocaleString('id-ID')}
         </h2>
         {Object.entries(kategoriMap).map(([kategori, total], idx) => (
           <p key={idx}>
-            {kategori}: Rp{total.toLocaleString('id-ID')}
+      {kategori}: Rp{total.toLocaleString('id-ID')}
           </p>
         ))}
       </div>
