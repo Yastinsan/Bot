@@ -8,6 +8,7 @@ import * as XLSX from 'xlsx';
 export default function RekapPage() {
   const { id, bulan } = useParams<{ id: string; bulan: string }>();
   const [pengeluaran, setPengeluaran] = useState<any[]>([]);
+  const [kategoriFilter, setKategoriFilter] = useState<string>('');
 
   useEffect(() => {
     if (id && bulan) {
@@ -53,22 +54,16 @@ export default function RekapPage() {
       header: ['No', 'Tanggal', 'Barang', 'Kategori', 'Jumlah'],
     });
   
-    // Format kolom lebar dan jumlah rata kanan
     const colWidths = [
-      { wpx: 40 },  // No
-      { wpx: 100 }, // Tanggal
-      { wpx: 250 }, // Keterangan
-      { wpx: 120 }, // Kategori
-      { wpx: 100 }, // Jumlah
+      { wpx: 40 }, { wpx: 100 }, { wpx: 250 }, { wpx: 120 }, { wpx: 100 },
     ];
     sheet['!cols'] = colWidths;
   
-    // Format jumlah sebagai "Rp" + angka
     data.forEach((item, i) => {
-      const cellRef = XLSX.utils.encode_cell({ r: i + 1, c: 4 }); // baris ke-i+1, kolom "Jumlah"
+      const cellRef = XLSX.utils.encode_cell({ r: i + 1, c: 4 });
       const cell = sheet[cellRef];
       if (cell && typeof item.Jumlah === 'number') {
-        cell.t = 's'; // ubah jadi string
+        cell.t = 's';
         cell.v = 'Rp' + item.Jumlah.toLocaleString('id-ID');
       }
     });
@@ -79,13 +74,15 @@ export default function RekapPage() {
   };
 
   const totalSemua = pengeluaran.reduce((acc, item) => acc + item.jumlah, 0);
+  const dataTampil = pengeluaran.filter(item => !kategoriFilter || item.kategori === kategoriFilter);
+
   return (
     <div className="min-h-screen bg-white text-black p-4 sm:p-6 font-sans relative">
       {/* Header */}
       <div className="text-center mb-4">
         <h1 className="text-lg sm:text-2xl font-bold tracking-wide">REKAP PENGELUARAN</h1>
       </div>
-  
+
       {/* Info User */}
       <div className="mb-4 text-sm">
         <p className="text-gray-700">
@@ -95,7 +92,26 @@ export default function RekapPage() {
           Bulan: <span className="font-semibold">{bulan}</span>
         </p>
       </div>
-  
+
+      {/* Dropdown Filter */}
+      <div className="mb-4 text-sm">
+        <label className="font-medium mr-2">Filter Kategori:</label>
+        <select
+          className="border px-2 py-1 text-sm"
+          value={kategoriFilter}
+          onChange={(e) => setKategoriFilter(e.target.value)}
+        >
+          <option value="">Semua</option>
+          {Array.from(new Set(pengeluaran.map(item => item.kategori)))
+            .sort()
+            .map((kategori, idx) => (
+              <option key={idx} value={kategori}>
+                {kategori}
+              </option>
+          ))}
+        </select>
+      </div>
+
       {/* Tabel pengeluaran */}
       <div className="overflow-x-auto mb-8">
         <table className="min-w-[600px] w-full text-sm table-fixed">
@@ -109,7 +125,7 @@ export default function RekapPage() {
             </tr>
           </thead>
           <tbody>
-            {pengeluaran.map((item, index) => (
+            {dataTampil.map((item, index) => (
               <tr key={index} className="hover:bg-gray-50">
                 <td className="px-2 py-1">{index + 1}</td>
                 <td className="px-2 py-1">{item.tanggal}</td>
@@ -123,38 +139,35 @@ export default function RekapPage() {
           </tbody>
         </table>
       </div>
-  
+
       {/* Tombol + Total */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-10 gap-4">
-      {/* Tombol Export */}
-      <button
-        onClick={exportToExcel}
-        className="w-full sm:w-auto bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded shadow-md"
-      >
-        Export to Excel
-      </button>
+        {/* Tombol Export */}
+        <button
+          onClick={exportToExcel}
+          className="w-full sm:w-auto bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded shadow-md"
+        >
+          Export to Excel
+        </button>
 
-      {/* Total + Logo sebagai watermark */}
-      <div className="relative text-sm font-semibold text-left sm:text-right">
-        {/* Watermark logo */}
-        <img
-          src="/Ferlly Fahtasya Logo.png"
-          alt="Logo Watermark"
-          className="absolute bottom-0 right-10 w-60 h-60 opacity-100 pointer-events-none"
-        />
+        {/* Total + Logo watermark */}
+        <div className="relative text-sm font-semibold text-left sm:text-right">
+          <img
+            src="/Ferlly Fahtasya Logo.png"
+            alt="Logo Watermark"
+            className="absolute bottom-0 right-10 opacity-50 pointer-events-none sm:w-60 sm:h-60 w-32 h-32"
+          />
+          <h2 className="text-base sm:text-lg mb-1">
+            Total Keseluruhan: Rp{totalSemua.toLocaleString('id-ID')}
+          </h2>
+          {Object.entries(kategoriMap).map(([kategori, total], idx) => (
+            <p key={idx}>
+              {kategori}: Rp{total.toLocaleString('id-ID')}
+            </p>
+          ))}
+        </div>
+      </div>
 
-      {/* Isi total + kategori */}
-        <h2 className="text-base mb-1">
-          Total Keseluruhan: Rp{totalSemua.toLocaleString('id-ID')}
-        </h2>
-        {Object.entries(kategoriMap).map(([kategori, total], idx) => (
-          <p key={idx}>
-      {kategori}: Rp{total.toLocaleString('id-ID')}
-          </p>
-        ))}
-      </div>
-      </div>
-  
       {/* Logo atas kanan */}
       <div className="absolute top-4 right-4 hidden sm:block">
         <img
