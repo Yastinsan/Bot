@@ -170,11 +170,11 @@ export default function RekapPage() {
       </div>
 
       {/* Logo atas kanan */}
-      <div className="absolute top-4 right-4 hidden sm:block">
+      <div className="absolute top-4 right-4">
         <img
           src="/Logo Keuangan Pey.png"
           alt="Logo"
-          className="w-40 h-40 object-contain"
+          className="w-20 h-20 sm:w-40 sm:h-40 object-contain"
         />
       </div>
     </div>
