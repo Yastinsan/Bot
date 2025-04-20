@@ -113,21 +113,21 @@ export default function RekapPage() {
       </div>
 
       {/* Tabel pengeluaran */}
-      <div className="overflow-x-auto mb-8">
-        <table className="min-w-[600px] w-full text-sm table-fixed">
+      <div className="mb-8">
+        <table className="w-full table-auto text-xs sm:text-sm">
           <thead className="bg-gray-200 text-left border border-gray-300">
             <tr>
-              <th className="border px-2 py-1 w-[50px]">No</th>
-              <th className="border px-2 py-1 w-[120px]">Tanggal</th>
-              <th className="border px-2 py-1 w-[40%]">Barang</th>
+              <th className="border px-2 py-1 text-center w-[10%]">No</th>
+              <th className="border px-2 py-1 w-[25%]">Tanggal</th>
+              <th className="border px-2 py-1">Barang</th>
               <th className="border px-2 py-1 w-[20%]">Kategori</th>
-              <th className="border px-2 py-1 w-[20%] text-right">Jumlah</th>
+              <th className="border px-2 py-1 text-right w-[20%]">Jumlah</th>
             </tr>
           </thead>
           <tbody>
             {dataTampil.map((item, index) => (
               <tr key={index} className="hover:bg-gray-50">
-                <td className="px-2 py-1">{index + 1}</td>
+                <td className="px-2 py-1 text-center">{index + 1}</td>
                 <td className="px-2 py-1">{item.tanggal}</td>
                 <td className="px-2 py-1">{item.catatan}</td>
                 <td className="px-2 py-1">{item.kategori}</td>
@@ -139,6 +139,7 @@ export default function RekapPage() {
           </tbody>
         </table>
       </div>
+
 
       {/* Tombol + Total */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-10 gap-4">
@@ -155,7 +156,7 @@ export default function RekapPage() {
           <img
             src="/Ferlly Fahtasya Logo.png"
             alt="Logo Watermark"
-            className="absolute bottom-0 right-10 opacity-50 pointer-events-none sm:w-60 sm:h-60 w-32 h-32"
+            className="absolute bottom-0 right-10 opacity-50 pointer-events-none sm:w-60 sm:h-60 w-45 h-45"
           />
           <h2 className="text-base sm:text-lg mb-1">
             Total Keseluruhan: Rp{totalSemua.toLocaleString('id-ID')}
