@@ -174,7 +174,7 @@ export default function RekapPage() {
         <img
           src="/Logo Keuangan Pey.png"
           alt="Logo"
-          className="w-20 h-20 sm:w-40 sm:h-40 object-contain"
+          className="w-30 h-30 sm:w-40 sm:h-40 object-contain"
         />
       </div>
     </div>
