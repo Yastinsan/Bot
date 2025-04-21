@@ -156,7 +156,7 @@ export default function RekapPage() {
           <img
             src="/Ferlly Fahtasya Logo.png"
             alt="Logo Watermark"
-            className="absolute bottom-0 right-10 opacity-50 pointer-events-none sm:w-60 sm:h-60 w-45 h-45"
+            className="absolute bottom-0 right-10 opacity-50 pointer-events-none sm:w-40 sm:h-40 w-45 h-45"
           />
           <h2 className="text-base sm:text-lg mb-1">
             Total Keseluruhan: Rp{totalSemua.toLocaleString('id-ID')}
