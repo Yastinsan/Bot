@@ -16,6 +16,16 @@ export default function RekapPage() {
     }
   }, [id, bulan]);
 
+  const convertToLocalDate = (utcString: string) => {
+    const utcDate = new Date(utcString);
+    return utcDate.toLocaleDateString('id-ID', {
+      timeZone: 'Asia/Jakarta',
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+    });
+  };
+
   const fetchPengeluaran = async () => {
     const firstDay = `${bulan}-01`;
     const lastDay = new Date(new Date(firstDay).getFullYear(), new Date(firstDay).getMonth() + 1, 0)
@@ -30,7 +40,11 @@ export default function RekapPage() {
       .lte('tanggal', lastDay);
 
     if (!error && data) {
-      setPengeluaran(data);
+      const dataConverted = data.map((item) => ({
+        ...item,
+        tanggal: convertToLocalDate(item.tanggal),
+      }));
+      setPengeluaran(dataConverted);
     } else {
       console.error('Error:', error);
     }
